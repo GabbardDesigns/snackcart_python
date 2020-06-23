@@ -13,19 +13,18 @@ class Cart:
         if confirm == 'y':
             print(f'{inventory[selection]["title"]} successfully added to cart.')
             self.cart.append(inventory[selection])
+
         else:
             print('Well, alright then.  Bye.')
 
     def removefromcart(self, selection):
+        print(f'You selected {self.cart[selection]["title"]}.')
 
-        confirm = input(f'Remove cart[selection]["title"] from your cart? (y/n)  ')
-        #
-        # if confirm == 'y':
-        #     print(f'{inventory[selection]["title"]} successfully added to cart.')
-        #     self.cart.append(inventory[selection])
-        # else:
-        #     print('Well, alright then.  Bye.')
+        confirm = input(f'Remove {self.cart[selection]["title"]} from your cart? (y/n)  ')
 
+        if confirm == 'y':
+            print(f'{self.cart[selection]["title"]} successfully removed from cart.')
+            self.cart.remove(self.cart[selection])
 
     def calculateTotal(self):
         total = 0.00

@@ -1,8 +1,6 @@
 from inventory import Inventory
 from cart import Cart
 
-
-
 full_inventory =[
     {
         "title": "Bottled Water",
@@ -23,7 +21,6 @@ full_inventory =[
         "min_dis_qty": "",
         "qty_price": ""
     },
-
 
     {
         "title": "Gatorade",
@@ -225,14 +222,17 @@ def remove_menu():
         print('{:>30}    $ {:.2f}'.format(cart_total, showtotal))
 
         selection = input('''
-        To select the item you would like to purchase enter its number.
+        To select the item you would like to remove enter its number.
         When you have finished selecting items, type 'pay'.
-        To remove an item, type 'remove'.  
+        To add an item, type 'add'.  
         ''')
+        selection = process_selection(selection)
         selection = int(selection)
-        print(f'You selected {full[selection]["title"]}.')
         cart.removefromcart(selection)
-        pass
+        remove_menu()
+
+
+
 
 def help():
     menuoption = input('''
@@ -254,7 +254,9 @@ def payment_screen():
         cart.showcart()
         showtotal = cart.calculateTotal()
         print('{:>30}    $ {:.2f}'.format(cart_total, showtotal))
-        pass
+
+
+        return ('b')
 
 def process_selection(menuoption):
     if menuoption == 'add':
@@ -269,8 +271,9 @@ def process_selection(menuoption):
     elif menuoption == 'help':
         help()
         return
-    if menuoption == 'q':
+    else:
         return menuoption
+
 
 
 
