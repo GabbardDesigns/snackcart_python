@@ -1,4 +1,7 @@
 from inventory import Inventory
+from cart import Cart
+
+
 
 full_inventory =[
     {
@@ -67,36 +70,6 @@ full_inventory =[
         "imagepath": "img/products/tea.gif",
         "price": "1.00",
         "alt" : "16 ounce bottle of tea",
-        "qty_dis": "False",
-        "min_dis_qty": "",
-        "qty_price": ""
-    },
-
-    {
-        "title": "Vitamin Water",
-        "imagepath": "img/products/vitamin-water.gif",
-        "price": "1.00",
-        "alt" : "16 ounce bottle of Vitamin Water",
-        "qty_dis": "False",
-        "min_dis_qty": "",
-        "qty_price": ""
-    },
-
-    {
-        "title": "Blow Pop",
-        "imagepath": "img/products/blowpop.gif",
-        "price": "0.25",
-        "alt" : "Bag Animal Crackers",
-        "qty_dis": "False",
-        "min_dis_qty": "",
-        "qty_price": ""
-    },
-
-    {
-        "title": "Laffy Taffy (3)",
-        "imagepath": "img/products/laffy-taffy.gif",
-        "price": "0.25",
-        "alt" : "12 ounce bottle of Apple Juice",
         "qty_dis": "False",
         "min_dis_qty": "",
         "qty_price": ""
@@ -213,25 +186,120 @@ full_inventory =[
         "qty_price": ""
     }
 ]
-full=Inventory()
+full = Inventory()
 full = Inventory.populate(full, full_inventory)
 
 # #Searching and dealing with just a dictionary
 # print (next(item for item in full_inventory if item["qty_dis"] == "True"))
 
-print('\n')
+cart = Cart()
+left_side = "Inventory"
+right_side = "Your cart"
+cart_total = "Cart Total"
 
-for c, items in enumerate(full, 0):
-    print(f'{c:<3} |   {items["title"]:<20} |   {items["price"]:>8}')
+def addmenu():
+    print('\n')
+    print(f'{left_side:^40}')
+    for c, items in enumerate(full, 0):
+        print(f'{c:<3} |   {items["title"]:<20} |   {items["price"]:>7}')
 
-selection = int(input('Choose which item you would like to purchase: '))
+    if len(cart) >= 1:
+        print(f'\n \n{right_side:^40}')
+        cart.showcart()
+        showtotal = cart.calculateTotal()
+        print('{:>30}    $ {:.2f}'.format(cart_total, showtotal))
 
-print(f'You selected {full_inventory[selection]["title"]}.')
+    print("""
+            """)
 
-confirm = input(f'Add {full_inventory[selection]["title"]} to your cart? y/n')
+    selectItem()
 
-if confirm == 'y':
-    print(f'{full_inventory[selection]["title"]} successfully added to cart.')
-else:
-    print('Well, alright then.  Bye.')
+def remove_menu():
+    if len(cart) == 0:
+        print("Your cart is empty.  You cannot remove things from an empty cart.")
+        pass
+    else:
+        print(f'\n \n{right_side:^40}')
+        cart.showcart()
+        showtotal = cart.calculateTotal()
+        print('{:>30}    $ {:.2f}'.format(cart_total, showtotal))
 
+        selection = input('''
+        To select the item you would like to purchase enter its number.
+        When you have finished selecting items, type 'pay'.
+        To remove an item, type 'remove'.  
+        ''')
+        selection = int(selection)
+        print(f'You selected {full[selection]["title"]}.')
+        cart.removefromcart(selection)
+        pass
+
+def help():
+    menuoption = input('''
+        If you would like to add items to your cart, type 'add'.
+        If you would like to remove an item, type 'remove'.
+        If you have selected all of the items you would like to purchase, type 'pay'.
+        If you would like to quit, type 'q'.
+        To see this in the future enter 'help'.
+        \n''')
+    menuoption = process_selection(menuoption)
+    return menuoption
+
+def payment_screen():
+    if len(cart) == 0:
+        print("Your cart is empty.  Please add some items before attempting to pay.")
+        pass
+    else:
+        print(f'\n \n{right_side:^40}')
+        cart.showcart()
+        showtotal = cart.calculateTotal()
+        print('{:>30}    $ {:.2f}'.format(cart_total, showtotal))
+        pass
+
+def process_selection(menuoption):
+    if menuoption == 'add':
+        addmenu()
+        return
+    elif menuoption == 'pay':
+        payment_screen()
+        return
+    elif menuoption == 'remove':
+        remove_menu()
+        return
+    elif menuoption == 'help':
+        help()
+        return
+    if menuoption == 'q':
+        return menuoption
+
+
+
+def selectItem():
+    selection = input('''
+    To select the item you would like to purchase enter its number.
+    When you have finished selecting items, type 'pay'.
+    To remove an item, type 'remove'.  
+    ''')
+    if not str.isdigit(selection):
+        selection = process_selection(selection)
+        return
+    else:
+        selection = int(selection)
+        print(f'You selected {full[selection]["title"]}.')
+        cart.addtocart(full, selection)
+        addmenu()
+
+# the inititator of the program
+quit = None
+firsttime = True
+
+while quit != 'q':
+    quit = help()
+
+
+def menu():
+    print("""
+    
+    
+    """)
+    input
